@@ -1,5 +1,6 @@
-var connect = require('connect');
-var app = require('express').createServer();
+var express = require('express');
+var app = express.createServer(express.logger()
+	,express.bodyParser());
 var io = require('socket.io').listen(app);
 
 app.get('/',function(req,res){
@@ -11,13 +12,12 @@ app.get('/bus',function(req,res){
 });
 
 app.post('/bus',function(req,res){
-	io.sockets.emit('echo-crate',{message : req.body});
+	console.log(req.body);
+	io.sockets.emit(req.body.channel,{message:req.body.message});
+	res.redirect('/');
 });
 
 io.sockets.on('connection',function(socket) {
-	socket.emit('echo-crate',{status:'in crate'});
-});
-	
-app.use(connect.bodyParser());
+})
 	
 app.listen(1337);
