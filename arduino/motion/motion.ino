@@ -1,78 +1,151 @@
+#include <Event.h>
+#include <Timer.h>
+
+#include <OneWire.h>
+
+
+
 #include <SPI.h>
 #include <Dhcp.h>
 #include <Dns.h>
 #include <Ethernet.h>
-#include <EthernetClient.h>
 #include <EthernetServer.h>
 #include <EthernetUdp.h>
 #include <util.h>
 
 
-int motionDetector = 2;
-int onboardLed = 13;
 byte mac[] = {0x00,0xE0,0x36,0xEF,0x5E,0xFE};
-IPAddress server(192,168,1,8);
-boolean latch = false;
+unsigned int localPort = 3968;
+byte broadcast[] = {0xFF,0xFF,0xFF,0xFF};
+EthernetUDP Udp;
+const int pir = 2;
 
-EthernetClient client;
+
+OneWire ds(2);//DS18B20 on pin 2
+
+Timer t;
 
 void setup()
-{
-   pinMode(motionDetector,INPUT);
-   pinMode(onboardLed,OUTPUT);
-   
+{  
    Serial.begin(9600);
    Serial.println("Starting");
+   
+   //t.every(60000, measureTemperature);
    
    if(Ethernet.begin(mac) == 0)
    {
       Serial.println("Failed to configure Ethernet using DHCP");
-     for(;;)
-      ; 
+      for(;;)
+      {
+        ; 
+      }
    }
    
-   delay(1000);
+   Serial.println("Ethernet configured using DHCP successfully.");
+   Serial.println("Local IP: " + Ethernet.localIP());
    
-    if(client.connect(server,1337))
-    {
-       Serial.println("connected");
-    }else{
-       Serial.println("connection failed"); 
-    }
-   
-   Serial.println("startup complete.");
+   Udp.begin(localPort);
 }
 
-void loop()
-{
-  if(digitalRead(motionDetector) == HIGH && !latch)
-  {
-    if(client.connected())
-    {
-       client.println("POST /bus HTTP/1.0");
-       client.println("channel: echo-create");
-       client.println("message: Testing"); 
-    }
-    
-    digitalWrite(onboardLed,HIGH);
-    if (client.available()) {
-      char c = client.read();
-      Serial.print(c);
-    }
-    
-    while(client.available() > 0)
-    {
-      char c = client.read();
-      Serial.print(c);
-    }
-   
-    latch = true;
+void loop(){
+  
+  //t.update();
+  measureTemperature();
+  
+  //if(isMotionDetected()){
+  //  if(broadcasted != 1){
+  //    Udp.beginPacket(broadcast,localPort);
+  //    Udp.write("{sensor:\"PIR0001\",value: 1,utcdatetime:\"2012-08-23T05:23:00Z\"}");
+  //    Udp.endPacket();
+  //    broadcasted = 1;
+  //  }
+  //}else{
+  // broadcasted = 0; 
+  //}
+}
+
+void measureTemperature(){
+    int HighByte, LowByte, TReading, SignBit, Tc_100, Whole, Fract;
+  
+  byte i;
+  byte present = 0;
+  byte data[12];
+  byte addr[8];
+  
+  if ( !ds.search(addr)) {
+    Serial.print("No more addresses.\n");
+    ds.reset_search();
+    return;
+  }
+
+  Serial.print("R=");
+  for( i = 0; i < 8; i++) {
+    Serial.print(addr[i], HEX);
+    Serial.print(" ");
+  }
+
+  if ( OneWire::crc8( addr, 7) != addr[7]) {
+      Serial.print("CRC is not valid!\n");
+      return;
   }
   
-  if(!client.connected()){
-   client.stop();
-   Serial.println("disconnected"); 
+  if(addr[0] != 0x28) {
+      Serial.print("Device family is not recognized: 0x");
+      Serial.println(addr[0],HEX);
+      return;
   }
+
+  ds.reset();
+  ds.select(addr);
+  ds.write(0x44,1);         // start conversion, with parasite power on at the end
+
+  delay(1000);     // maybe 750ms is enough, maybe not
+  // we might do a ds.depower() here, but the reset will take care of it.
+
+  present = ds.reset();
+  ds.select(addr);    
+  ds.write(0xBE);         // Read Scratchpad
+
+  Serial.print("P=");
+  Serial.print(present,HEX);
+  Serial.print(" ");
+  for ( i = 0; i < 9; i++) {           // we need 9 bytes
+    data[i] = ds.read();
+    Serial.print(data[i], HEX);
+    Serial.print(" ");
+  }
+  Serial.print(" CRC=");
+  Serial.print( OneWire::crc8( data, 8), HEX);
+  Serial.println();
+  
+  LowByte = data[0];
+  HighByte = data[1];
+  TReading = (HighByte << 8) + LowByte;
+  SignBit = TReading & 0x8000;  // test most sig bit
+  if (SignBit) // negative
+  {
+    TReading = (TReading ^ 0xffff) + 1; // 2's comp
+  }
+  Tc_100 = (6 * TReading) + TReading / 4;    // multiply by (100 * 0.0625) or 6.25
+
+  Whole = Tc_100 / 100;  // separate off the whole and fractional portions
+  Fract = Tc_100 % 100;
+  
+  String tempature = "";
+  
+  if (SignBit) // If its negative
+  {
+    tempature = "-";
+  }
+  
+  tempature = tempature + Whole + ".";
+  if (Fract < 10)
+  {
+    tempature = tempature + "0";
+  }
+  tempature = tempature + Fract;
+  
+  String json = "{ID:" + }
 }
 
 
