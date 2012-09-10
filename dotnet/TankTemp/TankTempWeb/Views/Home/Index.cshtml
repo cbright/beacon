@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>What Tempature is Topher's Tank?</h2>
+<div class="tempature"><span id="current-temp-celsius"></span><sup>&deg;C</sup></div>
+<div class="tempature"><span id="current-temp-fahrenheit"></span><sup>&deg;F</sup></div>
+<div class="tempature"><span id="current-temp-kelvin"></span><sup>&deg;K</sup></div>
+<div>Last Observation:<span id="observation"></span></div>
+
+@section scripts {
+@Scripts.Render("~/Scripts/jquery.signalR-0.5.3.min.js")
+@Scripts.Render("~/signalr/hubs")
+
+<script type="text/javascript">
+    $(function () {
+        var observer = $.connection.tempatureObservationHub;
+
+        observer.updateCurrentTempature = function (message) {
+            $('#current-temp-celsius').text(message.Tempature);
+            $('#current-temp-fahrenheit').text(message.Tempature * 9 / 5 + 32);
+            $('#current-temp-kelvin').text(message.Tempature + 273.15);
+            $('#observation').text(message.ObservedAt);
+        }
+
+        $.connection.hub.start();
+
+    });
+</script>
+}
