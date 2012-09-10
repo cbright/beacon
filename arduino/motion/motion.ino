@@ -51,17 +51,6 @@ void loop(){
   
   //t.update();
   measureTemperature();
-  
-  //if(isMotionDetected()){
-  //  if(broadcasted != 1){
-  //    Udp.beginPacket(broadcast,localPort);
-  //    Udp.write("{sensor:\"PIR0001\",value: 1,utcdatetime:\"2012-08-23T05:23:00Z\"}");
-  //    Udp.endPacket();
-  //    broadcasted = 1;
-  //  }
-  //}else{
-  // broadcasted = 0; 
-  //}
 }
 
 void measureTemperature(){
@@ -71,6 +60,8 @@ void measureTemperature(){
   byte present = 0;
   byte data[12];
   byte addr[8];
+  String address;
+  char buffer[50];
   
   if ( !ds.search(addr)) {
     Serial.print("No more addresses.\n");
@@ -78,10 +69,8 @@ void measureTemperature(){
     return;
   }
 
-  Serial.print("R=");
   for( i = 0; i < 8; i++) {
-    Serial.print(addr[i], HEX);
-    Serial.print(" ");
+    address += String(addr[i],HEX);
   }
 
   if ( OneWire::crc8( addr, 7) != addr[7]) {
@@ -106,17 +95,10 @@ void measureTemperature(){
   ds.select(addr);    
   ds.write(0xBE);         // Read Scratchpad
 
-  Serial.print("P=");
-  Serial.print(present,HEX);
-  Serial.print(" ");
+
   for ( i = 0; i < 9; i++) {           // we need 9 bytes
     data[i] = ds.read();
-    Serial.print(data[i], HEX);
-    Serial.print(" ");
   }
-  Serial.print(" CRC=");
-  Serial.print( OneWire::crc8( data, 8), HEX);
-  Serial.println();
   
   LowByte = data[0];
   HighByte = data[1];
@@ -135,7 +117,7 @@ void measureTemperature(){
   
   if (SignBit) // If its negative
   {
-    tempature = "-";
+    tempature = tempature +  "-";
   }
   
   tempature = tempature + Whole + ".";
@@ -145,7 +127,12 @@ void measureTemperature(){
   }
   tempature = tempature + Fract;
   
-  String json = "{ID:" + }
+  String json = String("{\"Id\":\"" + address + "\",\"Tempature\":" + tempature + "}");
+  json.toCharArray(buffer,50);
+  
+  Udp.beginPacket(broadcast,localPort);
+  Udp.write(buffer);
+  Udp.endPacket();
 }
 
 
