@@ -165,6 +165,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TempatureObservationsController.cs" />
     <Compile Include="Data\NHibernateModule.cs" />
+    <Compile Include="Data\NHibernateSessionModule.cs" />
     <Compile Include="Data\UnitOfWorkAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

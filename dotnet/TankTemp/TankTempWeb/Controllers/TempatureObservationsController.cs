@@ -12,16 +12,20 @@ namespace TankTempWeb.Controllers
 {
     public class TempatureObservationsController : ApiController
     {
+        private readonly IConnectionManager _connectionManager;
         private readonly IRepository<TempatureSensor> _sensors;
         private readonly IRepository<TempatureObservation> _observations;
 
-        public TempatureObservationsController(IRepository<TempatureSensor> sensors,IRepository<TempatureObservation> observations)
+        public TempatureObservationsController(IConnectionManager connectionManager,
+            IRepository<TempatureSensor> sensors,
+            IRepository<TempatureObservation> observations)
         {
+            _connectionManager = connectionManager;
             _sensors = sensors;
             _observations = observations;
         }
 
-        public HttpResponseMessage PostTempatureObservation(Guid id,TempatureObservation observation)
+        public HttpResponseMessage PostTempatureObservation(int id,TempatureObservation observation)
         {
             var sensor = _sensors.Get(id);
             if(sensor == null){
@@ -29,7 +33,7 @@ namespace TankTempWeb.Controllers
             }
 
             //update attached clients
-            var context = GlobalHost.ConnectionManager.GetHubContext<TempatureObservationHub>();
+            var context = _connectionManager.GetHubContext<TempatureObservationHub>();
             context.Clients.updateCurrentTempature(observation);
 
             observation.Sensor = sensor;

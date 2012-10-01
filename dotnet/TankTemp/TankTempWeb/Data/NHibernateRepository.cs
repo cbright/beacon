@@ -7,26 +7,26 @@ namespace TankTempWeb.Data
 {
     public class NHibernateRepository<T> : IRepository<T>
     {
-        private readonly ISession _session;
+        private readonly ISessionFactory _sessionFactory;
 
-        public NHibernateRepository(ISession session)
+        public NHibernateRepository(ISessionFactory sessionFactory)
         {
-            _session = session;
+            _sessionFactory = sessionFactory;
         }
 
-        public T Get(Guid id)
+        public T Get(int id)
         {
-            return _session.Load<T>(id);
+            return  _sessionFactory.GetCurrentSession().Load<T>(id);
         }
 
         public void Save(T obj)
         {
-            _session.SaveOrUpdate(obj);
+            _sessionFactory.GetCurrentSession().SaveOrUpdate(obj);
         }
 
         public IQueryable<T> Query()
         {
-            return _session.Query<T>();
+            return _sessionFactory.GetCurrentSession().Query<T>();
         }
     }
 }

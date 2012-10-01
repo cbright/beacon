@@ -19,12 +19,14 @@ namespace TankTempWeb.Data
                     x => x.FromConnectionStringWithKey("tanktemp")))
                          .Mappings(m => m.AutoMappings.Add(
                              AutoMap.AssemblyOf<TempatureSensor>().IgnoreBase
-                                 <Sensor>())).
+                                 <Sensor>()))
+                         .CurrentSessionContext("managed_web").
                          BuildSessionFactory()).InSingletonScope();
             Kernel.Bind(typeof(IRepository<>)).To(typeof (NHibernateRepository<>));
+
+            //Let NHibernate manage the ISessionScope
             Kernel.Bind<ISession>()
-                .ToMethod(c => c.Kernel.Get<ISessionFactory>().OpenSession())
-                .InRequestScope();
+                .ToMethod(c => c.Kernel.Get<ISessionFactory>().GetCurrentSession()).InTransientScope();
         }
 
 

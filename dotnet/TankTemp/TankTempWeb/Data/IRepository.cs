@@ -5,7 +5,7 @@ namespace TankTempWeb.Data
 {
     public interface IRepository<T>
     {
-        T Get(Guid id);
+        T Get(int id);
 
         void Save(T obj);
 
