@@ -18,7 +18,7 @@ namespace TankTempWeb.Data
         public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
             var session = SessionFactoryFinder().GetCurrentSession();
-
+            
             var txn = session.Transaction;
 
             if (txn == null || !txn.IsActive) return;

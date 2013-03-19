@@ -12,6 +12,8 @@ namespace TankTempWeb.Controllers
 {
     public class TempatureObservationsController : ApiController
     {
+
+        private static log4net.ILog _log = log4net.LogManager.GetLogger(typeof(TempatureObservationsController).DeclaringType);
         private readonly IConnectionManager _connectionManager;
         private readonly IRepository<TempatureSensor> _sensors;
         private readonly IRepository<TempatureObservation> _observations;

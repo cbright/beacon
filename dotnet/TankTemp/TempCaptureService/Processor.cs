@@ -10,6 +10,7 @@ namespace TempCaptureService
     public class Processor
     {
         private readonly string _url;
+        private DateTime _lastUpdate;
 
         public Processor(string url)
         {
@@ -22,6 +23,12 @@ namespace TempCaptureService
         {
             Log.Debug("Processing UDP message.");
             var measurement = JsonConvert.DeserializeObject<TempatureMeasurement>(rawData);
+
+            if(DateTime.UtcNow.Subtract(_lastUpdate) < new TimeSpan(0,0,1,0))
+                return;
+
+            _lastUpdate = DateTime.UtcNow;
+
             Task.Factory.StartNew(() =>
             {
                 using (var client = new WebClient())
