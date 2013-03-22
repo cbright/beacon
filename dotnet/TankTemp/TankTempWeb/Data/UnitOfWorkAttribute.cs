@@ -4,20 +4,24 @@ using NHibernate;
 
 namespace TankTempWeb.Data
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    public class UnitOfWorkAttribute : ActionFilterAttribute 
+    public class UnitOfWork : IActionFilter
     {
-        public Func<ISessionFactory> SessionFactoryFinder { get; set; }
+        private readonly ISessionFactory _sessionFactory;
 
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public UnitOfWork(ISessionFactory sessionFactory)
         {
-            var session = SessionFactoryFinder().GetCurrentSession();
+            _sessionFactory = sessionFactory;
+        }
+
+        public void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            var session = _sessionFactory.GetCurrentSession();
             session.BeginTransaction();
         }
 
-        public override void OnResultExecuted(ResultExecutedContext filterContext)
+        public void OnActionExecuted(ActionExecutedContext filterContext)
         {
-            var session = SessionFactoryFinder().GetCurrentSession();
+            var session = _sessionFactory.GetCurrentSession();
             
             var txn = session.Transaction;
 

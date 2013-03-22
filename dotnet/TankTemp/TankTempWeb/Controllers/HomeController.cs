@@ -11,7 +11,6 @@ namespace TankTempWeb.Controllers
     {
         private static log4net.ILog _log = log4net.LogManager.GetLogger(typeof(HomeController));
 
-        [UnitOfWork]
         public ActionResult Index()
         {
             _log.Info("Testing");

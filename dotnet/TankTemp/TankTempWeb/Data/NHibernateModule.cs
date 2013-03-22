@@ -15,19 +15,18 @@ namespace TankTempWeb.Data
     {
         public override void Load()
         {
-            Kernel.Bind<ISessionFactory>().ToMethod(
-                s => Fluently.Configure().Database(MsSqlConfiguration.MsSql2008.ConnectionString(
+            var sessionFactory =
+                Fluently.Configure().Database(MsSqlConfiguration.MsSql2008.ConnectionString(
                     x => x.FromConnectionStringWithKey("tanktemp")))
-                         .Mappings(m => m.AutoMappings.Add(
-                             AutoMap.AssemblyOf<TempatureSensor>().IgnoreBase(typeof(Sensor))))
-                         .CurrentSessionContext("managed_web")
-                         .ExposeConfiguration(c => {
-                             new SchemaExport(c)
-                                 .SetOutputFile("script.sql")
-                                 .Execute(true, false, false);
-                             
-                         })
-                         .BuildSessionFactory()).InSingletonScope();
+                    .Mappings(m => m.AutoMappings.Add(
+                        AutoMap.AssemblyOf<Sensor>(t => t.Namespace == "TankTempWeb.Models")
+                            .Conventions.Add(FluentNHibernate.Conventions.Helpers.DefaultLazy.Never())))
+                    .CurrentSessionContext("managed_web")
+                    .ExposeConfiguration(c => new SchemaExport(c)
+                                                  .SetOutputFile(@"C:\script.sql")
+                                                  .Execute(true, false, false)).BuildSessionFactory();
+
+            Kernel.Bind<ISessionFactory>().ToConstant(sessionFactory).InSingletonScope();
             Kernel.Bind(typeof(IRepository<>)).To(typeof(NHibernateRepository<>));
 
             //Let NHibernate manage the ISessionScope

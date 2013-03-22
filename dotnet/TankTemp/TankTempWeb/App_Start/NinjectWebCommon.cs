@@ -1,9 +1,13 @@
+using System.Web.Mvc;
 using FluentNHibernate.Automapping;
 using FluentNHibernate.Cfg;
 using FluentNHibernate.Cfg.Db;
 using NHibernate;
 using TankTempWeb.Data;
 using TankTempWeb.Models;
+using Ninject.Web.Mvc.FilterBindingSyntax;
+using Ninject.Web.Mvc.Filter;
+
 
 [assembly: WebActivator.PreApplicationStartMethod(typeof(TankTempWeb.App_Start.NinjectWebCommon), "Start")]
 [assembly: WebActivator.ApplicationShutdownMethodAttribute(typeof(TankTempWeb.App_Start.NinjectWebCommon), "Stop")]
@@ -50,6 +54,7 @@ namespace TankTempWeb.App_Start
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             
             RegisterServices(kernel);
+            
             return kernel;
         }
 
@@ -68,7 +73,8 @@ namespace TankTempWeb.App_Start
     {
         public override void Load()
         {
-            //this.BindFilter<UnitOfWorkAttribute>(FilterScope.Method, 0);
+            this.BindFilter<UnitOfWork>(FilterScope.Action, 0);
+            this.Bind<IHttpModule>().To<NHibernateSessionModule>();
 
         }
     }
