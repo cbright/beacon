@@ -94,6 +94,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Entity.Design" />
     <Reference Include="System.Data.Services.Client" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
@@ -178,18 +179,24 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TempatureObservationsController.cs" />
+    <Compile Include="Data\Conventions\LazyLoadOneToManyConvention.cs" />
     <Compile Include="Data\Migrations\Baseline.cs" />
     <Compile Include="Data\NHibernateModule.cs" />
     <Compile Include="Data\NHibernateSessionModule.cs" />
-    <Compile Include="Data\UnitOfWorkAttribute.cs" />
+    <Compile Include="Data\Conventions\PluralizeConvention.cs" />
+    <Compile Include="Data\Conventions\TankTempConfiguration.cs" />
+    <Compile Include="Data\UnitOfWork.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Data\IRepository.cs" />
-    <Compile Include="Models\Sensor.cs" />
-    <Compile Include="Models\TempatureObservation.cs" />
-    <Compile Include="Models\TempatureSensor.cs" />
+    <Compile Include="Models\Api\v1\TempatureObservation.cs" />
+    <Compile Include="Models\Domain\HourlySummary.cs" />
+    <Compile Include="Models\Domain\Network.cs" />
+    <Compile Include="Models\Domain\Sensor.cs" />
     <Compile Include="Data\NHibernateRepository.cs" />
+    <Compile Include="Models\Domain\TemperatureObservation.cs" />
+    <Compile Include="Models\Domain\TemperatureSensor.cs" />
     <Compile Include="TempatureObservationHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

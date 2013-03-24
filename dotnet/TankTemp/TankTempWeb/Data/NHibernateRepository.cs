@@ -2,31 +2,54 @@
 using System.Linq;
 using NHibernate;
 using NHibernate.Linq;
+using TankTempWeb.Models;
+using TankTempWeb.Models.Domain;
 
 namespace TankTempWeb.Data
 {
     public class NHibernateRepository<T> : IRepository<T>
     {
-        private readonly ISessionFactory _sessionFactory;
+        protected readonly ISession Session;
 
-        public NHibernateRepository(ISessionFactory sessionFactory)
+        public NHibernateRepository(ISession session)
         {
-            _sessionFactory = sessionFactory;
+            Session = session;
         }
 
         public T Get(int id)
         {
-            return  _sessionFactory.GetCurrentSession().Load<T>(id);
+            return  Session.Load<T>(id);
         }
 
         public void Save(T obj)
         {
-            _sessionFactory.GetCurrentSession().SaveOrUpdate(obj);
+            Session.SaveOrUpdate(obj);
         }
 
         public IQueryable<T> Query()
         {
-            return _sessionFactory.GetCurrentSession().Query<T>();
+            return Session.Query<T>();
+        }
+    }
+
+    public interface ISensorRepository : IRepository<Sensor>
+    {
+        Sensor GetBySerialNumber(string serialNumber);
+    }
+
+    public class NHibernateSensorRepository : NHibernateRepository<Sensor>, ISensorRepository
+    {
+        public NHibernateSensorRepository(ISession session)
+            : base(session)
+        {
+            
+        }
+
+        public Sensor GetBySerialNumber(string serialNumber)
+        {
+            return
+                Query().FirstOrDefault(
+                    s => s.SerialNumber.Equals(serialNumber, StringComparison.CurrentCultureIgnoreCase));
         }
     }
 }

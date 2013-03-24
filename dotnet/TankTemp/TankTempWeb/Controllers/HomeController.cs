@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using TankTempWeb.Data;
+using TankTempWeb.Models;
 
 namespace TankTempWeb.Controllers
 {
@@ -13,6 +14,7 @@ namespace TankTempWeb.Controllers
 
         public ActionResult Index()
         {
+
             _log.Info("Testing");
             return View();
         }
