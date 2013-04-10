@@ -19,6 +19,7 @@ namespace TankTempWeb.Data
 
         public void Init(HttpApplication context)
         {
+            _app = context;
             context.BeginRequest += ContextBeginRequest;
             context.EndRequest += ContextEndRequest;
         }
@@ -51,8 +52,7 @@ namespace TankTempWeb.Data
 
         public void Dispose()
         {
-            _app.BeginRequest -= ContextBeginRequest;
-            _app.EndRequest -= ContextEndRequest;
+            if (_app == null) return;
             _app = null;
         }
     }

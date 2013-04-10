@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" standalone="yes"?>
+<schema xmlns="http://tempuri.org/schema.xsd">
+  <Networks>
+    <Id>1</Id>
+    <Name>Topher's Tank</Name>
+  </Networks>
+</schema>

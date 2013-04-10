@@ -18,7 +18,7 @@ namespace TankTempWeb.Data
 
         public T Get(int id)
         {
-            return  Session.Load<T>(id);
+            return Session.Get<T>(id);
         }
 
         public void Save(T obj)
@@ -35,6 +35,7 @@ namespace TankTempWeb.Data
     public interface ISensorRepository : IRepository<Sensor>
     {
         Sensor GetBySerialNumber(string serialNumber);
+        IQueryable<TemperatureObservation> Query(int id);
     }
 
     public class NHibernateSensorRepository : NHibernateRepository<Sensor>, ISensorRepository
@@ -50,6 +51,12 @@ namespace TankTempWeb.Data
             return
                 Query().FirstOrDefault(
                     s => s.SerialNumber.Equals(serialNumber, StringComparison.CurrentCultureIgnoreCase));
+        }
+
+        public IQueryable<TemperatureObservation> Query(int id)
+        {
+            return Session.Query<TemperatureObservation>()
+                .Where(t => t.Sensor.Id == id);
         }
     }
 }

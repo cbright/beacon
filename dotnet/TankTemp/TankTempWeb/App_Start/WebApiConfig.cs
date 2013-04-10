@@ -10,10 +10,17 @@ namespace TankTempWeb
         public static void Register(HttpConfiguration config)
         {
             config.Routes.MapHttpRoute(
+                name: "ObservationApi",
+                routeTemplate: "api/v1/sensor/{id}/observation/{param}",
+                defaults: new { controller = "observation", param = RouteParameter.Optional });
+
+            config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{id}",
+                routeTemplate: "api/v1/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+
         }
     }
 }

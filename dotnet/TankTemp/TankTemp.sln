@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TempCaptureService", "TempCaptureService\TempCaptureService.csproj", "{675C2CE3-273B-401A-9832-25AAFD457756}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TempCaptureTestHarness", "TempCaptureTestHarness\TempCaptureTestHarness.csproj", "{92FB709A-05EE-4EFA-8EF6-8530FAFFF8C5}"
@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A51E77
 	ProjectSection(SolutionItems) = preProject
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TankTempTests", "TankTempTests\TankTempTests.csproj", "{2467B65F-9423-44B1-B567-38A6798C0DE7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -78,6 +80,18 @@ Global
 		{62F688F3-8681-463B-99F8-BB7A3E620002}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{62F688F3-8681-463B-99F8-BB7A3E620002}.Release|x64.ActiveCfg = Release|Any CPU
 		{62F688F3-8681-463B-99F8-BB7A3E620002}.Release|x86.ActiveCfg = Release|Any CPU
+		{2467B65F-9423-44B1-B567-38A6798C0DE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2467B65F-9423-44B1-B567-38A6798C0DE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2467B65F-9423-44B1-B567-38A6798C0DE7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2467B65F-9423-44B1-B567-38A6798C0DE7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2467B65F-9423-44B1-B567-38A6798C0DE7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2467B65F-9423-44B1-B567-38A6798C0DE7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2467B65F-9423-44B1-B567-38A6798C0DE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2467B65F-9423-44B1-B567-38A6798C0DE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2467B65F-9423-44B1-B567-38A6798C0DE7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2467B65F-9423-44B1-B567-38A6798C0DE7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2467B65F-9423-44B1-B567-38A6798C0DE7}.Release|x64.ActiveCfg = Release|Any CPU
+		{2467B65F-9423-44B1-B567-38A6798C0DE7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

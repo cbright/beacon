@@ -1,13 +1,24 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
 
 namespace TankTempWeb.Models.Api.v1
 {
-    public class TempatureObservation
+    [DataContract]
+    [KnownType(typeof(TemperatureObservation))]
+    public class Observation
     {
-        public float Value { get; set; }
+        [DataMember,Required]
+        public int SensorId { get; set; }
 
+        [DataMember,Required]
         public DateTime ObservedAt { get; set; }
+    }
 
-        public string SensorSerialNumber { get; set; }
+    [DataContract]
+    public class TemperatureObservation : Observation
+    {
+        [DataMember,Required]
+        public float Value { get; set; }
     }
 }

@@ -1,4 +1,8 @@
-﻿namespace TankTempWeb.Models.Domain
+﻿using System;
+using System.Net.Http;
+using System.Linq;
+
+namespace TankTempWeb.Models.Domain
 {
     public class TemperatureSensor : Sensor
     {
