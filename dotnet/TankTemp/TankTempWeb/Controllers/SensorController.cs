@@ -44,7 +44,7 @@ namespace TankTempWeb.Controllers
             return apiSensor;
         }
 
-        public HttpResponseMessage Post(TankApi.CreateSensor sensor)
+        public HttpResponseMessage Post(TankApi.Sensor sensor)
         {
             var network = _networks.Get(sensor.NetworkId);
             if(network == null){
@@ -79,7 +79,10 @@ namespace TankTempWeb.Controllers
                 Unit = newSensor.Unit
             };
 
-            return Request.CreateResponse<TankApi.Sensor>(HttpStatusCode.Created, createdSensor);
+            var response = Request.CreateResponse<TankApi.Sensor>(HttpStatusCode.Created, createdSensor);
+            response.Headers.Location = new Uri(Request.RequestUri,string.Concat("sensor","/",createdSensor.Id.ToString()));
+
+            return response;
         }
     }
 }

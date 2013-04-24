@@ -9,6 +9,7 @@ Scenario: Create a new sensor
 		| 1         | 28d702b40043 | TankTempature | C    | TemperatureSensor |
 	When I POST to "/api/v1/sensor"
 	Then the result HTTP Status code should be "201"
+	And the result should have "location" header "/api/v1/sensor/1"
 
 Scenario: Create a new sensor for unknown network
 	Given I have a sensor as

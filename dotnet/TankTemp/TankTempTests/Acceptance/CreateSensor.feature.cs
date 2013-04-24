@@ -91,6 +91,8 @@ this.ScenarioSetup(scenarioInfo);
  testRunner.When("I POST to \"/api/v1/sensor\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 11
  testRunner.Then("the result HTTP Status code should be \"201\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 12
+ testRunner.And("the result should have \"location\" header \"/api/v1/sensor/1\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -100,7 +102,7 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void CreateANewSensorForUnknownNetwork()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create a new sensor for unknown network", ((string[])(null)));
-#line 13
+#line 14
 this.ScenarioSetup(scenarioInfo);
 #line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
@@ -115,11 +117,11 @@ this.ScenarioSetup(scenarioInfo);
                         "TankTemp",
                         "C",
                         "TemperatureSensor"});
-#line 14
+#line 15
  testRunner.Given("I have a sensor as", ((string)(null)), table2, "Given ");
-#line 17
- testRunner.When("I POST to \"/api/v1/sensor\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 18
+ testRunner.When("I POST to \"/api/v1/sensor\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 19
  testRunner.Then("the result HTTP Status code should be \"404\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -130,7 +132,7 @@ this.ScenarioSetup(scenarioInfo);
         public virtual void CreateNewSensorOfUknownType()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Create new sensor of uknown type", ((string[])(null)));
-#line 20
+#line 21
 this.ScenarioSetup(scenarioInfo);
 #line hidden
             TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
@@ -145,11 +147,11 @@ this.ScenarioSetup(scenarioInfo);
                         "TankTempature",
                         "C",
                         "FloatSensor"});
-#line 21
+#line 22
  testRunner.Given("I have a sensor as", ((string)(null)), table3, "Given ");
-#line 24
- testRunner.When("I POST to \"/api/v1/sensor\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 25
+ testRunner.When("I POST to \"/api/v1/sensor\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 26
  testRunner.Then("the result HTTP Status code should be \"400\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();

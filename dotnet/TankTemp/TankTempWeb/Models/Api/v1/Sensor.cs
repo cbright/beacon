@@ -13,6 +13,9 @@ namespace TankTempWeb.Models.Api.v1
         public int? Id { get; set; }
 
         [DataMember]
+        public int NetworkId { get; set; }
+
+        [DataMember]
         public string SerialNumber { get; set; }
 
         [DataMember]

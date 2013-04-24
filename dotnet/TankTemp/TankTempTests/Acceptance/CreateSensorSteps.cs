@@ -12,13 +12,13 @@ namespace TankTempTests.Acceptance
     [Binding]
     public class CreateSensorSteps
     {
-        private TankTempWeb.Models.Api.v1.CreateSensor _sensor = new TankTempWeb.Models.Api.v1.CreateSensor();
+        private TankTempWeb.Models.Api.v1.Sensor _sensor = new TankTempWeb.Models.Api.v1.Sensor();
         private HttpWebResponse _response;
 
         [Given(@"I have a sensor as")]
         public void GivenIHaveASensorAs(Table table)
         {
-            _sensor = new TankTempWeb.Models.Api.v1.CreateSensor
+            _sensor = new TankTempWeb.Models.Api.v1.Sensor
             {
                 NetworkId = Convert.ToInt32(table.Rows[0][0]),
                 SerialNumber = table.Rows[0][1],
@@ -57,5 +57,12 @@ namespace TankTempTests.Acceptance
         {
             Assert.AreEqual(p0,(int)_response.StatusCode);
         }
+
+        [Then(@"the result should have ""(.*)"" header ""(.*)""")]
+        public void ThenTheResultShouldHaveHeader(string header, string value)
+        {
+            Assert.AreEqual(true,_response.Headers[header].Contains(value));
+        }
+
     }
 }
