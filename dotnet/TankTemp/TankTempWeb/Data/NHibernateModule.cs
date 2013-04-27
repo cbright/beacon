@@ -28,9 +28,10 @@ namespace TankTempWeb.Data
                             .Conventions.AddFromAssemblyOf<PluralizeConvention>()
                             .Conventions.Add(FluentNHibernate.Conventions.Helpers.DefaultLazy.Never())))
                     .CurrentSessionContext("managed_web")
-                    .ExposeConfiguration(c => new SchemaExport(c)
-                                                  .SetOutputFile(@"C:\script.sql")
-                                                  .Execute(true, false, false)).BuildSessionFactory();
+                    .BuildSessionFactory();
+                    //.ExposeConfiguration(c => new SchemaExport(c)
+                                                  //.SetOutputFile(@"C:\script.sql")
+                                                  //.Execute(true, false, false)).BuildSessionFactory();
 
             Kernel.Bind<ISessionFactory>().ToConstant(sessionFactory).InSingletonScope();
             Kernel.Bind(typeof(IRepository<>)).To(typeof(NHibernateRepository<>));
